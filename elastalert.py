@@ -430,7 +430,7 @@ class ElastAlerter(object):
         if 'doc_type' not in rule and len(hits):
             rule['doc_type'] = hits[0]['_type']
         return hits
-
+#genai
     def get_hits_count(self, rule, starttime, endtime, index):
         """ Query Elasticsearch for the count of results and returns a list of timestamps
         equal to the endtime. This allows the results to be passed to rules which expect
@@ -537,7 +537,7 @@ class ElastAlerter(object):
             'Queried rule %s from %s to %s: %s buckets' % (rule['name'], pretty_ts(starttime, lt), pretty_ts(endtime, lt), len(buckets))
         )
         return {endtime: buckets}
-
+#genai
     def get_hits_aggregation(self, rule, starttime, endtime, index, query_key, term_size=None):
         rule_filter = copy.copy(rule['filter'])
         base_query = self.get_query(
@@ -1944,7 +1944,7 @@ class ElastAlerter(object):
             elastalert_logger.info('Rule %s disabled', rule['name'])
         if self.notify_email:
             self.send_notification_email(exception=exception, rule=rule)
-
+#genai
     def send_notification_email(self, text='', exception=None, rule=None, subject=None, rule_file=None):
         email_body = text
         rule_name = None
@@ -1976,7 +1976,7 @@ class ElastAlerter(object):
         email['To'] = ', '.join(recipients)
         email['From'] = self.from_addr
         email['Reply-To'] = self.conf.get('email_reply_to', email['To'])
-
+#genai
         try:
             smtp = SMTP(self.smtp_host)
             smtp.sendmail(self.from_addr, recipients, email.as_string())

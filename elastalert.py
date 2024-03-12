@@ -606,7 +606,7 @@ class ElastAlerter(object):
             if now - timestamp > buffer_time:
                 remove.append(_id)
         list(map(rule['processed_hits'].pop, remove))
-
+#genai
     def run_query(self, rule, start=None, end=None, scroll=False):
         """ Query for the rule and pass all of the results to the RuleType instance.
 
@@ -636,7 +636,7 @@ class ElastAlerter(object):
                 old_len = len(data)
                 data = self.remove_duplicate_events(data, rule)
                 self.thread_data.num_dupes += old_len - len(data)
-
+#genai
         # There was an exception while querying
         if data is None:
             return False

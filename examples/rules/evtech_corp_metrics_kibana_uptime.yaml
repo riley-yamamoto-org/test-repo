@@ -1,0 +1,42 @@
+name: Corp Kibana Connection Uptime
+include: ["@timestamp", "owner", "category", "description", "url.full", "event.dataset", "http.response.status_code", "host", "num_hits", "num_matches","http.response.body.content"]
+description: Health endpoint reported service is down in the last 10 minutes.
+type: percentage_match
+index: heartbeat-*
+num_events: 30
+buffer_time:
+  minutes: 10
+filter:
+- term:
+    monitor.name: "evtech-corporate metrics eagleview"
+match_bucket_filter:
+- term:
+    monitor.status: "up"
+min_percentage: 99
+realert:
+  minutes: 1
+exponential_realert:
+  minutes: 5
+owner: "alex.chun@eagleview.com"
+category: "prod"
+alert:
+#- slack
+- post
+slack_username_override: "Elastalert"
+slack_title: "evtech-platform-ci metrics - metrics site is down in corp"
+slack_webhook_url: "https://hooks.slack.com/services/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"
+slack_emoji_override: ":eagleiewlogo:"
+
+http_post_url: "https://api.statushub.io/api/status_pages/cloudops/incidents?api_key=496613d286e86bd01f693ddb4597bf93"
+http_post_static_payload:
+  incident: {"title":"Jenkins Platform","update":{"body":"message","incident_type":"investigating","draft":false}}
+  service_statuses: {"service_id":"50732","status_name":"down"}
+  #title: Jenkins Platform
+  #service_id: 50732
+  #status_name: Down
+# http_post_static_payload:
+#   apikey: 496613d286e86bd01f693ddb4597bf93
+http_post_headers:
+  Content-Type: application/json
+  Accept: application/vnd.statushub.v2
+http_post_all_values: true
